@@ -1,8 +1,9 @@
 @font-face {
-  font-family: "toutiao"; /* Project id 3499676 */
+  font-family: "toutiao";
+  /* Project id 3499676 */
   src: url('iconfont.woff2?t=1656990609939') format('woff2'),
-       url('iconfont.woff?t=1656990609939') format('woff'),
-       url('iconfont.ttf?t=1656990609939') format('truetype');
+    url('iconfont.woff?t=1656990609939') format('woff'),
+    url('iconfont.ttf?t=1656990609939') format('truetype');
 }
 
 .toutiao {
@@ -17,83 +18,82 @@
   content: "\e606";
 }
 
-.toutiiao-pinglun:before {
+.toutiao-pinglun:before {
   content: "\e607";
 }
 
-.toutiiao-shouji:before {
+.toutiao-shouji:before {
   content: "\e608";
 }
 
-.toutiiao-shanchu:before {
+.toutiao-shanchu:before {
   content: "\e609";
 }
 
-.toutiiao-shouye:before {
+.toutiao-shouye:before {
   content: "\e60a";
 }
 
-.toutiiao-dianzan2:before {
+.toutiao-dianzan2:before {
   content: "\e60b";
 }
 
-.toutiiao-shoucang:before {
+.toutiao-shoucang:before {
   content: "\e60c";
 }
 
-.toutiiao-sousuo:before {
+.toutiao-sousuo:before {
   content: "\e60d";
 }
 
-.toutiiao-wenda:before {
+.toutiao-wenda:before {
   content: "\e60e";
 }
 
-.toutiiao-lishi:before {
+.toutiao-lishi:before {
   content: "\e60f";
 }
 
-.toutiiao-shipin:before {
+.toutiao-shipin:before {
   content: "\e610";
 }
 
-.toutiiao-fenxiang:before {
+.toutiao-fenxiang:before {
   content: "\e611";
 }
 
-.toutiiao-youjiantou:before {
+.toutiao-youjiantou:before {
   content: "\e612";
 }
 
-.toutiiao-wuwangluo:before {
+.toutiao-wuwangluo:before {
   content: "\e613";
 }
 
-.toutiiao-zuojiantou:before {
+.toutiao-zuojiantou:before {
   content: "\e614";
 }
 
-.toutiiao-wode:before {
+.toutiao-wode:before {
   content: "\e615";
 }
 
-.toutiiao-dianzan:before {
+.toutiao-dianzan:before {
   content: "\e616";
 }
 
-.toutiiao-yanzhengma:before {
+.toutiao-yanzhengma:before {
   content: "\e617";
 }
 
-.toutiiao-yuedu:before {
+.toutiao-yuedu:before {
   content: "\e618";
 }
 
-.toutiiao-guanbi:before {
+.toutiao-guanbi:before {
   content: "\e619";
 }
 
-.toutiiao-zuopin:before {
+.toutiao-zuopin:before {
   content: "\e61a";
 }
-
