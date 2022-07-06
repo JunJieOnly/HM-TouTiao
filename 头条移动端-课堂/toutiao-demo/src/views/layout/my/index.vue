@@ -1,5 +1,7 @@
 <template>
-  <div>我的</div>
+  <div>
+    <router-link to="/login">去登录</router-link>
+  </div>
 </template>
 
 <script>
