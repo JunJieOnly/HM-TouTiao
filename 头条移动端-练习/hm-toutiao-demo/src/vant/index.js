@@ -1,9 +1,11 @@
 import Vue from 'vue';
-import { Tabbar, TabbarItem, Form, Field, NavBar, Button } from 'vant';
+import { Tabbar, TabbarItem, Form, Field, NavBar, Button, CountDown, Toast } from 'vant';
 
-Vue.use(Tabbar);
-Vue.use(TabbarItem);
-Vue.use(Form);
-Vue.use(Field);
-Vue.use(NavBar);
-Vue.use(Button);
+Vue.use(Tabbar)
+    .use(TabbarItem)
+    .use(Form)
+    .use(Field)
+    .use(NavBar)
+    .use(Button)
+    .use(CountDown)
+    .use(Toast)
