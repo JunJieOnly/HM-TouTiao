@@ -24,7 +24,6 @@ import { getChannelApi } from "@/api/home"
 export default {
   async created() {
     const res = await getChannelApi()
-    console.log(res)
   },
 }
 </script>

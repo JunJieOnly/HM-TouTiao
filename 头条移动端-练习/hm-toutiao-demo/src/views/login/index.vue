@@ -53,6 +53,7 @@
 
 <script>
 import { GetSmsApi, userLoginApi } from "@/api/Login"
+import { mapMutations } from "vuex"
 export default {
   data() {
     return {
@@ -74,6 +75,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(["setUser"]),
     // 登录提交
     async onSubmit() {
       this.$toast.loading({
@@ -82,13 +84,16 @@ export default {
         duration: 0,
       })
       try {
-        await userLoginApi(this.user)
+        const { data } = await userLoginApi(this.user)
+        this.setUser(data.data)
       } catch (error) {
         const { response } = error
         this.$toast.fail(response.data)
         return
       }
       this.$toast.clear()
+      // 登录成功跳转我的页面
+      this.$router.push("/my")
     },
     // 发送验证码
     async sendSms() {
