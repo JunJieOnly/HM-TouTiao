@@ -12,6 +12,8 @@ const store = new Vuex.Store({
   },
   // 计算属性
   getters: {
+    // 获取token
+    token: state => state.user.token
   },
   // 修改数据
   mutations: {

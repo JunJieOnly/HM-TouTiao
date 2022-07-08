@@ -57,6 +57,7 @@
 import { sendSmsApi, userLogin } from "@/api/Login"
 import { mapMutations } from "vuex"
 export default {
+  name: "Login",
   data() {
     return {
       isCountDownShow: false,
