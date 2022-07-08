@@ -55,6 +55,7 @@
 
 <script>
 import { sendSmsApi, userLogin } from "@/api/Login"
+import { mapMutations } from "vuex"
 export default {
   data() {
     return {
@@ -79,6 +80,8 @@ export default {
     }
   },
   methods: {
+    // 通过映射变成当前组件的方法
+    ...mapMutations(["setUser"]),
     // 登录
     async onSubmit() {
       this.$toast.loading({
@@ -90,13 +93,19 @@ export default {
       // 发送登录请求
       try {
         const { data } = await userLogin(this.user)
-        console.log(data)
+        // 保存到vuex
+        // 方式一: this.$store.commit("方法名", 参数)
+        this.$store.commit("setUser", data.data)
+        // 方式二: mapMutations
+        // this.setUser(data.data)
       } catch (error) {
-        console.log(error)
+        const { response } = error
+        return this.$toast.fail(response.data.message)
       }
-
       // 数据请求成功后，手动调用clear方法清除当前页面的loading
       this.$toast.clear()
+      // 登录成功之后跳转
+      this.$router.push("/my")
     },
     // 发送验证码
     async sendSms() {
