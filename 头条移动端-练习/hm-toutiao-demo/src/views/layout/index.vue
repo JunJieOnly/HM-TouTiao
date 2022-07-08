@@ -12,18 +12,19 @@
       <van-tabbar-item icon-prefix="toutiao" replace to="/video" icon="shipin"
         >视频</van-tabbar-item
       >
-      <van-tabbar-item icon-prefix="toutiao" replace to="/my" icon="wode"
-        >我的</van-tabbar-item
-      >
+      <van-tabbar-item icon-prefix="toutiao" replace to="/my" icon="wode">
+        {{ token ? "我的" : "未登录" }}
+      </van-tabbar-item>
     </van-tabbar>
   </div>
 </template>
 
 <script>
-import { getChannelApi } from "@/api/home"
+import { mapGetters } from "vuex"
 export default {
-  async created() {
-    const res = await getChannelApi()
+  name: "Layout",
+  computed: {
+    ...mapGetters(["token"]),
   },
 }
 </script>

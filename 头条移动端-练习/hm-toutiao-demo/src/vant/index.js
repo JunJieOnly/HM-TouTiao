@@ -1,5 +1,8 @@
 import Vue from 'vue';
-import { Tabbar, TabbarItem, Form, Field, NavBar, Button, CountDown, Toast } from 'vant';
+import {
+    Tabbar, TabbarItem, Form, Field, NavBar, Button, CountDown, Toast,
+    Image as VanImage, Grid, GridItem, Cell, Dialog
+} from 'vant';
 
 Vue.use(Tabbar)
     .use(TabbarItem)
@@ -9,3 +12,8 @@ Vue.use(Tabbar)
     .use(Button)
     .use(CountDown)
     .use(Toast)
+    .use(VanImage)
+    .use(Grid)
+    .use(GridItem)
+    .use(Cell)
+    .use(Dialog)

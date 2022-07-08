@@ -7,10 +7,11 @@ export const setItem = (key, val) => {
 }
 
 export const getItem = key => {
+    const data = localStorage.getItem(key)
     try {
-        return localStorage.getItem(JSON.parse(key))
+        return JSON.parse(data)
     } catch (error) {
-        return localStorage.getItem(key)
+        return data
     }
 }
 
