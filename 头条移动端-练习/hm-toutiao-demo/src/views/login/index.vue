@@ -92,8 +92,14 @@ export default {
         return
       }
       this.$toast.clear()
-      // 登录成功跳转我的页面
-      this.$router.push("/my")
+      const url = this.$route.query.url // 路由守卫发送携带的地址
+      // 判断是否是从路由守卫跳来的，如果是登录之后就继续执行地址要去的路由
+      if (url) {
+        this.$router.replace(url)
+      } else {
+        // 登录成功跳转我的页面
+        this.$router.push("/my")
+      }
     },
     // 发送验证码
     async sendSms() {

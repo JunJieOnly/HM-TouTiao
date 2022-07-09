@@ -46,13 +46,14 @@
         icon-prefix="toutiao"
         icon="shoucang"
         text="收藏"
+        to="/user/collect"
       />
       <van-grid-item
         class="grid-item"
         icon-prefix="toutiao"
         icon="lishi"
         text="历史"
-        u
+        to="/user/history"
       />
     </van-grid>
     <!-- 单元格 -->

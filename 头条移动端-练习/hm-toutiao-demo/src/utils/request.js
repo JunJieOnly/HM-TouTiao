@@ -10,7 +10,7 @@ instance.interceptors.request.use(function (config) {
     // console.log(config);
     // 优化token
     const { user } = store.state
-    if (user && user.token) {
+    if (user && user.token) { // 判断token是否存在和token是否有值
         config.headers.Authorization = `Bearer ${user.token}`
     }
     console.log(config);
