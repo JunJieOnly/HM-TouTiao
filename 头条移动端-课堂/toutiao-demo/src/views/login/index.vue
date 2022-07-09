@@ -105,8 +105,15 @@ export default {
       }
       // 数据请求成功后，手动调用clear方法清除当前页面的loading
       this.$toast.clear()
-      // 登录成功之后跳转
-      this.$router.push("/my")
+      // 登录成功之后跳转,判断是否是拦截过来的登录界面，登录成功之后应该去之前想去的界面
+      const url = this.$route.query.url
+      // 判断url是否存在，存在就是拦截来的
+      if (url) {
+        this.$router.replace(url)
+      } else {
+        // 如果不是拦截过来的，那就跳转到我的界面
+        this.$router.push("/my")
+      }
     },
     // 发送验证码
     async sendSms() {

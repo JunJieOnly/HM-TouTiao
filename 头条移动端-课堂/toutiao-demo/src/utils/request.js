@@ -1,4 +1,6 @@
 import axios from "axios"
+// 引入store
+import store from "@/store"
 // 配置根域名
 const instance = axios.create({
     baseURL: "http://toutiao.itheima.net"
@@ -6,6 +8,9 @@ const instance = axios.create({
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
+    const token = store.getters.token
+    // 如果token存在就自动添加token
+    if (token) config.headers.Authorization = `Bearer ${token}`
     return config;
 }, function (error) {
     // 对请求错误做些什么
