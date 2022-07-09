@@ -61,8 +61,8 @@ const router = new VueRouter({
 })
 // 设置路由守卫 
 router.beforeEach((to, from, next) => {
-  console.log("to", to); // 到哪去
-  console.log("from", from); // 从哪来
+  // console.log("to", to); // 到哪去
+  // console.log("from", from); // 从哪来
   const token = store.getters.token
   // 判断当前页面是否需要登陆
   if (to.meta.needLogin) {
