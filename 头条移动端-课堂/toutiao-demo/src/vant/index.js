@@ -12,7 +12,9 @@ import {
     Grid,
     GridItem,
     Cell,
-    Dialog
+    Dialog,
+    Tab, Tabs,
+    List
 } from 'vant';
 
 Vue.use(Tabbar);
@@ -28,3 +30,6 @@ Vue.use(Grid);
 Vue.use(GridItem);
 Vue.use(Cell);
 Vue.use(Dialog);
+Vue.use(Tab);
+Vue.use(Tabs);
+Vue.use(List);
