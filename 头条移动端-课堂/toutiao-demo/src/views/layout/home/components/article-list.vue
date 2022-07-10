@@ -19,10 +19,15 @@
         error-text="请求失败，点击重新加载"
         @load="onLoad"
       >
-        <van-cell
+        <!-- <van-cell
           v-for="(item, index) in list"
           :key="index"
           :title="item.title"
+        /> -->
+        <articleItem
+          v-for="(item, index) in list"
+          :key="index"
+          :article-item="item"
         />
       </van-list>
     </van-pull-refresh>
@@ -31,7 +36,11 @@
 
 <script>
 import { getArticleListApi } from "@/api/Home"
+import articleItem from "./article-item.vue"
 export default {
+  components: {
+    articleItem,
+  },
   name: "articleList",
   props: {
     channel: {
