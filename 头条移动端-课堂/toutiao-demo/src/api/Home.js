@@ -8,3 +8,7 @@ export const getArticleListApi = params => request({
     url: "/v1_0/articles",
     params
 })
+// 获取全部频道数据
+export const getAllChannelApi = () => request({
+    url: "/v1_0/channels",
+})

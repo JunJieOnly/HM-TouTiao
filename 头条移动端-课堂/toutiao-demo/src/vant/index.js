@@ -15,10 +15,14 @@ import {
     Dialog,
     Tab, Tabs,
     List,
-    PullRefresh
+    PullRefresh,
+    Popup,
+    Icon
 } from 'vant';
 
 Vue.use(Tabbar);
+Vue.use(Popup);
+Vue.use(Icon);
 Vue.use(TabbarItem);
 Vue.use(NavBar);
 Vue.use(Form);
