@@ -44,7 +44,7 @@
         :text="item.name"
         v-for="item in recommendChannel"
         :key="item.id"
-        @click="addChannel(item.id)"
+        @click="addChannel(item)"
       />
     </van-grid>
     <!-- /频道推荐 -->
