@@ -5,6 +5,7 @@ import store from './store'
 import "@/vant"
 import '@/styles/index.less'
 import 'amfe-flexible'
+import "@/utils/day"
 Vue.config.productionTip = false
 
 new Vue({

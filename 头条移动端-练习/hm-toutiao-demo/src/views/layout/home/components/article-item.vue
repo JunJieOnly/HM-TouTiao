@@ -20,7 +20,7 @@
         <div class="label-info-wrap">
           <span>{{ articleItem.aut_name }}</span>
           <span>{{ articleItem.aut_id }}</span>
-          <span>{{ articleItem.pubdate }}</span>
+          <span>{{ articleItem.pubdate | relativeTime }}</span>
         </div>
       </template>
     </van-cell>
