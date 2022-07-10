@@ -6,20 +6,41 @@
     <!-- finised-text 没有数据的时候展示的文字 -->
     <!-- 自定义事件load 很重要！ 加载数据事件 -->
     <!-- loda事件页面一旦打开就自动调用，直到页面铺满为止就不调用，如果滚到到了底部就继续调用，直到没有数据 -->
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了"
-      @load="onLoad"
+    <van-pull-refresh
+      v-model="isLoading"
+      :success-text="successText"
+      @refresh="onRefresh"
     >
-      <van-cell v-for="item in list" :key="item.art_id" :title="item.title" />
-    </van-list>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        :error.sync="error"
+        error-text="请求失败，点击重新加载"
+        @load="onLoad"
+      >
+        <!-- <van-cell
+          v-for="(item, index) in list"
+          :key="index"
+          :title="item.title"
+        /> -->
+        <articleItem
+          v-for="(item, index) in list"
+          :key="index"
+          :article-item="item"
+        />
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 
 <script>
 import { getArticleListApi } from "@/api/Home"
+import articleItem from "./article-item.vue"
 export default {
+  components: {
+    articleItem,
+  },
   name: "articleList",
   props: {
     channel: {
@@ -32,10 +53,14 @@ export default {
       list: [],
       loading: false,
       finished: false,
-      timestamp: Date.now(),
+      timestamp: Date.now(), // 时间戳
+      error: false, // 是否出错
+      isLoading: false, // 是否下拉刷新中
+      successText: "", // 刷新成功文本
     }
   },
   methods: {
+    // 列表刷新
     async onLoad() {
       //  1.发送请求
       try {
@@ -43,6 +68,10 @@ export default {
           channel_id: this.channel.id, // 频道ID
           timestamp: this.timestamp, // 时间戳，请求新的推荐数据传当前的时间戳，请求历史推荐传指定的时间戳
         })
+        // 测试错误
+        /* if (Math.random() * 10 > 7) {
+          JSON.parse("qwer")
+        } */
         // 2.将数据追加到列表，而不是赋值
         this.list.push(...data.data.results)
         // 3.关闭加载中
@@ -56,8 +85,32 @@ export default {
           this.timestamp = data.data.pre_timestamp
         }
       } catch (error) {
+        // 关闭加载中
+        this.loading = false
+        // 错误捕捉之后把error改为true
+        this.error = true
         console.log(error)
       }
+    },
+    // 下拉刷新
+    async onRefresh() {
+      try {
+        // 获取最新数据
+        const { data } = await getArticleListApi({
+          channel_id: this.channel.id, // 频道ID
+          timestamp: Date.now(), // 时间戳，请求新的推荐数据传当前的时间戳，请求历史推荐传指定的时间戳
+        })
+        // 追加最新数据到前面
+        this.list.unshift(...data.data.results)
+        // 设置下拉刷新文本
+        this.successText = `成功加载了${data.data.results.length}条数据`
+      } catch (error) {
+        console.log(error)
+        // 更新失败提示文本
+        this.$toast.fail("更新失败")
+      }
+      // 只要刷新就要关闭加载
+      this.isLoading = false
     },
   },
 }

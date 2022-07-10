@@ -14,10 +14,15 @@ import {
     Cell,
     Dialog,
     Tab, Tabs,
-    List
+    List,
+    PullRefresh,
+    Popup,
+    Icon
 } from 'vant';
 
 Vue.use(Tabbar);
+Vue.use(Popup);
+Vue.use(Icon);
 Vue.use(TabbarItem);
 Vue.use(NavBar);
 Vue.use(Form);
@@ -33,3 +38,4 @@ Vue.use(Dialog);
 Vue.use(Tab);
 Vue.use(Tabs);
 Vue.use(List);
+Vue.use(PullRefresh);
