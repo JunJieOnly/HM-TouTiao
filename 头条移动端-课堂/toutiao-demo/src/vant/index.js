@@ -14,7 +14,8 @@ import {
     Cell,
     Dialog,
     Tab, Tabs,
-    List
+    List,
+    PullRefresh
 } from 'vant';
 
 Vue.use(Tabbar);
@@ -33,3 +34,4 @@ Vue.use(Dialog);
 Vue.use(Tab);
 Vue.use(Tabs);
 Vue.use(List);
+Vue.use(PullRefresh);
