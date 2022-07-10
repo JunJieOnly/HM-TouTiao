@@ -37,7 +37,11 @@ swipeable 开启左右手势滑动
           <!-- 占位元素 -->
           <div slot="nav-right" class="placeholder"></div>
           <!-- 右侧按钮 -->
-          <div slot="nav-right" class="hamburger-btn">
+          <div
+            slot="nav-right"
+            class="hamburger-btn"
+            @click="isEditShow = true"
+          >
             <i class="toutiao toutiao-gengduo"></i>
           </div>
         </van-tabs>
@@ -45,22 +49,32 @@ swipeable 开启左右手势滑动
         <!-- 标签页 -->
       </div>
     </template>
-  </div>
-</template>
-    <!-- 搜索 -->
+    <!-- 弹出层 -->
+    <van-popup
+      v-model="isEditShow"
+      closeable
+      close-icon-position="top-left"
+      position="bottom"
+      :style="{ height: '100%' }"
+    >
+      <!-- 内容 -->
+      <channelEdit :new-channel="channel" :active-index="active" />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserChannel } from "@/api/home"
 import articleList from "@/views/layout/home/components/article-list.vue"
+import channelEdit from "@/views/layout/home/components/channel-edit"
 export default {
   name: "home",
   data() {
     return {
-      active: 2,
+      active: 0,
       // 1.定义变量
       channel: null,
+      isEditShow: false, // 弹出层显示状态
     }
   },
   methods: {
@@ -83,6 +97,7 @@ export default {
   },
   components: {
     articleList,
+    channelEdit,
   },
 }
 </script>
