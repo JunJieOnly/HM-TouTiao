@@ -13,7 +13,7 @@ instance.interceptors.request.use(function (config) {
     if (user && user.token) { // 判断token是否存在和token是否有值
         config.headers.Authorization = `Bearer ${user.token}`
     }
-    console.log(config);
+    // console.log(config);
     return config;
 }, function (error) {
     // 对请求错误做些什么

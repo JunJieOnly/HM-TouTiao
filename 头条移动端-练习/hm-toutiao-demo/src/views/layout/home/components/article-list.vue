@@ -1,13 +1,23 @@
 <template>
   <div>
-    <van-list
-      v-model="loading"
-      :finished="finished"
-      finished-text="没有更多了"
-      @load="onLoad"
+    <van-pull-refresh
+      v-model="isLoading"
+      :success-text="successText"
+      @refresh="onRefresh"
     >
-      <van-cell v-for="item in list" :key="item.art_id" :title="item.title" />
-    </van-list>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+      >
+        <van-cell
+          v-for="(item, index) in list"
+          :key="index"
+          :title="item.title"
+        />
+      </van-list>
+    </van-pull-refresh>
   </div>
 </template>
 
@@ -27,9 +37,12 @@ export default {
       loading: false,
       finished: false,
       timestamp: Date.now(),
+      isLoading: false, // 加载完成
+      successText: "", // 刷新成功文本
     }
   },
   methods: {
+    // 列表刷新
     async onLoad() {
       // 1.获取数据
       try {
@@ -49,11 +62,30 @@ export default {
           // 有数据
           this.timestamp = data.data.pre_timestamp
         }
-        console.log(data)
+        // console.log(data)
       } catch (error) {
         // 捕捉错误
         console.log(error)
       }
+    },
+    // 下拉刷新
+    async onRefresh() {
+      // 获取数据
+      try {
+        const { data } = await getrAticlesList({
+          channel_id: this.channel.id,
+          timestamp: Date.now(),
+        })
+        // 数据追加到前面
+        this.list.unshift(...data.data.results)
+        this.successText = `成功加载了${data.data.results.length}条数据`
+      } catch (error) {
+        // 提示错误
+        this.$toast.fail("刷新错误")
+        console.log(error)
+      }
+      // 不管成功失败都关闭加载
+      this.isLoading = false
     },
   },
 }
