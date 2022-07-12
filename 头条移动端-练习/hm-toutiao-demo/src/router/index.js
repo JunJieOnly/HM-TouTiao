@@ -39,6 +39,10 @@ const routes = [
     component: () => import("@/views/login")
   },
   {
+    path: "/search",
+    component: () => import("@/views/search")
+  },
+  {
     path: "/user/collect",
     component: () => import("@/views/user/collect"),
     meta: {
