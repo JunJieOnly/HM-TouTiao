@@ -18,6 +18,7 @@
         class="grid-item"
         v-for="(item, index) in myChannel"
         :key="item.id"
+        @click="clickHandler(item, index)"
       >
         <van-icon
           slot="icon"
@@ -52,7 +53,13 @@
 </template>
 
 <script>
-import { getAllChannelApi } from "@/api/Home"
+import {
+  getAllChannelApi,
+  addUserChannelApi,
+  delUserChannelApi,
+} from "@/api/Home"
+import { mapGetters } from "vuex"
+import { setItem } from "@/utils/storage"
 export default {
   name: "ChannelEdit",
   props: {
@@ -74,6 +81,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(["token"]),
     recommentChannels() {
       // 筛选频道推荐数据
       // 定义一个数组
@@ -108,8 +116,59 @@ export default {
       }
     },
     // 添加频道
-    addChannel(val) {
+    async addChannel(val) {
+      // 添加到我的频道数据
       this.myChannel.push(val)
+      //数据持久化的逻辑,判断用户是否登录
+      if (this.token) {
+        // 登录了，存储到线上
+        try {
+          // 调接口
+          await addUserChannelApi({
+            // 传接口，上传到线上
+            channels: [
+              {
+                id: val.id,
+                seq: this.myChannel.length - 1,
+              },
+            ],
+          })
+        } catch (error) {
+          this.$toast.fail("同步线上失败")
+        }
+      } else {
+        // 未登录，存储到本地
+        setItem("TOUTIAO-USER-CHANNELS", this.myChannel)
+      }
+    },
+    // 点击我的频道操作
+    clickHandler(val, idx) {
+      // 判断是否处于编辑状态
+      if (this.isEdit) {
+        // 如果是推荐，不能删除
+        if (val.name === "推荐") return
+        // 如果删除的是激活项，则激活项目左边的内容，那么高亮激活索引同步
+        if (idx <= this.activeIndex) {
+          this.$emit("changeIndex", this.activeIndex - 1)
+        }
+        // true,点击删除
+        this.myChannel.splice(idx, 1)
+        // 调用删除逻辑
+        this.delSaveHandler(val.id)
+      } else {
+        // false  点击关闭弹出层，跳转对应tab内容 ,子父通信
+        this.$emit("changeTab", idx)
+      }
+    },
+    // 删除持久化逻辑
+    async delSaveHandler(channel_id) {
+      if (this.token) {
+        // 登录了，同步线上
+        await delUserChannelApi(channel_id)
+      } else {
+        // 未登录，保存本地
+        setItem("TOUTIAO-USER-CHANNELS", this.myChannel)
+      }
     },
   },
 }

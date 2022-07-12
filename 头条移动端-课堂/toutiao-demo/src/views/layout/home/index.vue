@@ -40,7 +40,12 @@ swipeable 开启左右手势滑动
       :style="{ height: '100%' }"
     >
       <!-- 内容 -->
-      <channel-edit :my-channel="channel" :active-index="active" />
+      <channel-edit
+        :my-channel="channel"
+        :active-index="active"
+        @changeTab="changeTab"
+        @changeIndex="changeIndex"
+      />
     </van-popup>
   </div>
 </template>
@@ -49,6 +54,7 @@ swipeable 开启左右手势滑动
 import { getChannelApi } from "@/api/Home"
 import articleList from "@/views/layout/home/components/article-list.vue"
 import channelEdit from "@/views/layout/home/components/channel-deit.vue"
+import { getItem } from "@/utils/storage"
 export default {
   name: "Home",
   components: {},
@@ -69,15 +75,39 @@ export default {
   methods: {
     // 2. 定义获取数据方法
     async initData() {
-      try {
-        // 2.1 发送请求
-        const { data } = await getChannelApi()
-        // 2.2 赋值
-        this.channel = data.data.channels
-      } catch (error) {
-        // 2.3 打印错误
-        console.log(error)
+      //  完整登录逻辑
+      // 判断有无token
+      if (this.$store.getters.token) {
+        // 如果登录了，请求会自动携带token
+        try {
+          const { data } = await getChannelApi()
+          this.channel = data.data.channels
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        const locaUserChannels = getItem("TOUTIAO-USER-CHANNELS")
+        if (locaUserChannels) {
+          // 如果没有登录，判断本地是否有数据，如果有，就使用本地数据
+          this.channel = locaUserChannels
+        } else {
+          // 如果本地都没，那就使用线上默认值
+          try {
+            const { data } = await getChannelApi()
+            this.channel = data.data.channels
+          } catch (error) {
+            console.log(error)
+          }
+        }
       }
+    },
+    // 子父通信，儿子通知父亲修改切换
+    changeTab(i) {
+      this.active = i // 修改激活项
+      this.isEditShow = false // 关闭弹出层
+    },
+    changeIndex(i) {
+      this.active = i // 高亮同步
     },
   },
   components: {
