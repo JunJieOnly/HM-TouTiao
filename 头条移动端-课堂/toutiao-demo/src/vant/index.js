@@ -17,12 +17,14 @@ import {
     List,
     PullRefresh,
     Popup,
-    Icon
+    Icon,
+    Search
 } from 'vant';
 
 Vue.use(Tabbar);
 Vue.use(Popup);
 Vue.use(Icon);
+Vue.use(Search);
 Vue.use(TabbarItem);
 Vue.use(NavBar);
 Vue.use(Form);
