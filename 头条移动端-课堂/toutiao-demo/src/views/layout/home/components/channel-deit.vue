@@ -147,7 +147,7 @@ export default {
       if (this.isEdit) {
         // 如果是推荐，不能删除
         if (val.name === "推荐") return
-        // 如果删除的是激活项，则激活项目左边的内容，那么高亮激活索引同步
+        // 如果删除的是激活项，及激活项目左边的内容，那么高亮激活索引同步
         if (idx <= this.activeIndex) {
           this.$emit("changeIndex", this.activeIndex - 1)
         }

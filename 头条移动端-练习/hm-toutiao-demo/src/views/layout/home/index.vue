@@ -18,10 +18,10 @@
         <!-- /导航栏 -->
         <!-- 频道列表 -->
         <!-- 
-animated 滑动的动画
-border 底边框线
-swipeable 开启左右手势滑动
--->
+                animated 滑动的动画
+                border 底边框线
+                swipeable 开启左右手势滑动
+          -->
         <van-tabs
           class="channel-tabs"
           v-model="active"
@@ -58,7 +58,12 @@ swipeable 开启左右手势滑动
       :style="{ height: '100%' }"
     >
       <!-- 内容 -->
-      <channelEdit :new-channel="channel" :active-index="active" />
+      <channelEdit
+        :new-channel="channel"
+        :active-index="active"
+        @changetab="changetab"
+        @changeLeft="changeLeft"
+      />
     </van-popup>
   </div>
 </template>
@@ -89,6 +94,14 @@ export default {
         // 2.3 错误捕捉
         console.log(error)
       }
+    },
+    // 子父通信儿子告诉父亲，要切换哪个数据
+    changetab(idx) {
+      this.active = idx // 切换高亮显示
+      this.isEditShow = false // 关闭弹出层
+    },
+    changeLeft(i) {
+      // this.active = i
     },
   },
   // 调用方法

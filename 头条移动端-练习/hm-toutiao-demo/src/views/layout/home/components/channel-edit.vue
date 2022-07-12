@@ -17,12 +17,12 @@
         class="grid-item"
         v-for="(item, index) in newChannel"
         :key="item.id"
+        @click="delChannel(item, index)"
       >
         <van-icon
           slot="icon"
           v-if="isShow && item.name !== '推荐'"
           name="clear"
-          @click="delChannel(index)"
         ></van-icon>
         <span
           class="text"
@@ -85,8 +85,20 @@ export default {
       this.newChannel.push(val)
     },
     // 删除频道
-    delChannel(index) {
-      this.newChannel.splice(index, 1)
+    delChannel(item, index) {
+      // 判断是否处于编辑状态,编辑状态下才能删除,否则点击关闭弹出层，切换当前tab栏内容
+      if (this.isShow) {
+        // 推荐不能删除
+        if (item.name === "推荐") return
+        // 如果删除的是当前高亮激活的内容，那么高亮就往左移动
+        if (item.id <= index) {
+          this.$emit("changeLeft", index - 1)
+        }
+        this.newChannel.splice(index, 1)
+      } else {
+        // 完成状态，点击切换内容，关闭弹出层
+        this.$emit("changetab", index)
+      }
     },
   },
   created() {
