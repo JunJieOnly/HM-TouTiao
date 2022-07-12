@@ -53,6 +53,10 @@ const routes = [
       needLogin: true
     }
   },
+  {
+    path: "/search",
+    component: () => import("@/views/search")
+  },
 ]
 // 实例化路由对象
 const router = new VueRouter({
