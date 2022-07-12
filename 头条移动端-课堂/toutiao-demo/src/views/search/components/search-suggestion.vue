@@ -1,11 +1,8 @@
 <template>
   <div class="search-suggestion">
-    <van-cell
-      :title="item"
-      icon="search"
-      v-for="(item, index) in list"
-      :key="index"
-    ></van-cell>
+    <van-cell icon="search" v-for="(item, index) in list" :key="index">
+      <template #title> <span v-html="hightColorText(item)"></span> </template>
+    </van-cell>
   </div>
 </template>
 
@@ -51,6 +48,13 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    hightColorText(text) {
+      let reg = new RegExp(this.searchText, "gi") // g是全局匹配； i 忽略大小写
+      return text.replace(
+        reg,
+        `<span style="color:red;">${this.searchText}</span>`
+      )
     },
   },
 }
