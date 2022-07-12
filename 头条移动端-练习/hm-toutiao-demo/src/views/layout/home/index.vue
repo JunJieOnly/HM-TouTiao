@@ -72,8 +72,13 @@
 import { getUserChannel } from "@/api/home"
 import articleList from "@/views/layout/home/components/article-list.vue"
 import channelEdit from "@/views/layout/home/components/channel-edit"
+import { getItem } from "@/utils/storage"
+import { mapGetters } from "vuex"
 export default {
   name: "home",
+  computed: {
+    ...mapGetters(["token"]),
+  },
   data() {
     return {
       active: 0,
@@ -85,14 +90,37 @@ export default {
   methods: {
     // 2.定义发送请求方法
     async UserInfo() {
-      try {
-        // 2.1 发送请求
-        const { data } = await getUserChannel()
-        // 2.2 赋值
-        this.channel = data.data.channels
-      } catch (error) {
-        // 2.3 错误捕捉
-        console.log(error)
+      // 完整登录逻辑：
+      // 1.判断是否登录 ? 使用户数据 :  使用本地数据
+      // 2.本地是否有数据 ? 使用本地 : 使用默认接口数据
+      if (this.token) {
+        try {
+          // 2.1 发送请求
+          const { data } = await getUserChannel()
+          // 2.2 赋值
+          this.channel = data.data.channels
+        } catch (error) {
+          // 2.3 错误捕捉
+          console.log(error)
+        }
+      } else {
+        const UserInfoData = getItem("HM-TOUTIAO-CNL")
+        // 判断本地数据是否存在
+        if (UserInfoData) {
+          // 存在，就使用本地数据
+          this.channel = UserInfoData
+        } else {
+          // 不存在，使用线上默认接口
+          try {
+            // 2.1 发送请求
+            const { data } = await getUserChannel()
+            // 2.2 赋值
+            this.channel = data.data.channels
+          } catch (error) {
+            // 2.3 错误捕捉
+            console.log(error)
+          }
+        }
       }
     },
     // 子父通信儿子告诉父亲，要切换哪个数据

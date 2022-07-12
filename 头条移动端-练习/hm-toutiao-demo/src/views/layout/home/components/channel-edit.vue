@@ -52,7 +52,13 @@
 </template>
 
 <script>
-import { getAllChannelApi } from "@/api/home"
+import {
+  getAllChannelApi,
+  addUserChannelApi,
+  delUserChannelApi,
+} from "@/api/home"
+import { mapGetters } from "vuex"
+import { setItem } from "@/utils/storage"
 export default {
   name: "ChannelEdit",
   props: {
@@ -81,10 +87,29 @@ export default {
       }
     },
     //添加频道
-    addChannel(val) {
+    async addChannel(val) {
       this.newChannel.push(val)
+      //添加数据持久化
+      if (this.token) {
+        // 登录，同步到线上
+        try {
+          const { data } = await addUserChannelApi({
+            channels: [
+              {
+                id: val.id,
+                seq: this.newChannel.length - 1,
+              },
+            ],
+          })
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        // 未登录，本地存储
+        setItem("HM-TOUTIAO-CNL", this.newChannel)
+      }
     },
-    // 删除频道
+    // 操作频道
     delChannel(item, index) {
       // 判断是否处于编辑状态,编辑状态下才能删除,否则点击关闭弹出层，切换当前tab栏内容
       if (this.isShow) {
@@ -95,9 +120,25 @@ export default {
           this.$emit("changeLeft", index - 1)
         }
         this.newChannel.splice(index, 1)
+        // 调用数据持久化方法
+        this.delUserChannel(item.id)
       } else {
         // 完成状态，点击切换内容，关闭弹出层
         this.$emit("changetab", index)
+      }
+    },
+    // 删除数据持久化
+    async delUserChannel(channel_id) {
+      if (this.token) {
+        // 登录了
+        try {
+          await delUserChannelApi(channel_id)
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        // 未登录
+        setItem("HM-TOUTIAO-CNL", this.newChannel)
       }
     },
   },
@@ -106,6 +147,7 @@ export default {
   },
   //   推荐频道
   computed: {
+    ...mapGetters(["token"]),
     recommendChannel() {
       // 推荐频道 = 全部频道 - 我的频道
       const arr = []
