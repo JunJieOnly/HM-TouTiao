@@ -2,7 +2,10 @@
   <div class="search-suggestion">
     <van-cell v-for="(item, index) in list" :key="index" icon="search">
       <template #title>
-        <span v-html="hightColorText(item)"></span>
+        <span
+          v-html="hightColorText(item)"
+          @click="$emit('searchSug', item)"
+        ></span>
       </template>
     </van-cell>
   </div>
@@ -22,6 +25,7 @@ export default {
     return {
       // 定义变量
       list: [],
+      timer: null,
     }
   },
   watch: {
@@ -30,7 +34,11 @@ export default {
       deep: true,
       immediate: true,
       handler() {
-        this.infoData()
+        clearTimeout(this.timer)
+        // 防抖
+        this.timer = setTimeout(() => {
+          this.infoData()
+        }, 300)
       },
     },
   },
@@ -39,7 +47,12 @@ export default {
     async infoData() {
       try {
         const { data } = await userSearchSuggestionApi({ q: this.searchText })
-        this.list = data.data.options
+        // 边缘处理
+        if (data.data.options.length === 1 && data.data.options[0] === null) {
+          this.list = []
+        } else {
+          this.list = data.data.options
+        }
       } catch (error) {
         console.log(error)
       }
