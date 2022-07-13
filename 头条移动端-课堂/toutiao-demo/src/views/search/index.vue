@@ -9,6 +9,7 @@
         show-action
         placeholder="请输入搜索关键词"
         background="#5094f3"
+        @focus="isResultsShow = false"
         @search="onSearch"
         @cancel="onCancel"
       />
@@ -28,7 +29,11 @@
     <!-- /联想建议 -->
 
     <!-- 搜索历史记录 -->
-    <search-history v-else />
+    <search-history
+      v-else
+      :search-histories="searchHistories"
+      @searchHistory="onSearch"
+    />
     <!-- /搜索历史记录 -->
   </div>
 </template>
@@ -37,6 +42,7 @@
 import SearchResult from "./components/search-result"
 import SearchHistory from "./components/search-history"
 import SearchSuggestion from "./components/search-suggestion"
+import { getItem, setItem } from "@/utils/storage"
 export default {
   name: "Search",
   components: {
@@ -48,10 +54,10 @@ export default {
     return {
       searchText: "",
       isResultsShow: false, // 搜索结果是否显示
+      searchHistories: getItem("TOUTIAO-HISTORY") || [], // 历史记录，1.按户回车，点击搜索建议
     }
   },
   methods: {
-    // 一石二鸟，输入框和子组件抛出来的事件同时绑定这个事件
     onSearch(val) {
       //#region
       // #endregion
@@ -60,14 +66,43 @@ export default {
       // 按下回车键or手机键盘上的完成或者搜索按钮，触发该事件
       this.searchText = val // 输入框内容变成点击的搜索建议
       this.isResultsShow = true // 显示搜索结果
+      // 方式1：ES6  Set去重
+      // let setArr = new Set(this.searchHistories)
+      // // 删除重复的
+      // setArr.delete(val)
+      // // 重新添加
+      // setArr.add(val)
+      // // 重新转化为数组
+      // setArr = Array.from(setArr)
+      // // 翻转数组
+      // this.searchHistories = setArr.reverse()
+      // 方式二： findIndex
+      // 先遍历之前的数组，然后判断之前的数组里面是否存在当前的值
+      let idx = this.searchHistories.findIndex((item) => item === val)
+      // 判断，如果存在就删除
+      if (idx !== -1) {
+        this.searchHistories.splice(idx, 1)
+      }
+      // 重新添加
+      this.searchHistories.unshift(val)
     },
     onCancel() {
-      // 点击取消二次，触发该事件，并清输入框内内容
-      console.log("取消")
+      // 点击取消，触发该事件，返回上一级
+      this.$router.back()
+    },
+  },
+  watch: {
+    searchHistories() {
+      setItem("TOUTIAO-HISTORY", this.searchHistories)
     },
   },
 }
 </script>
 
 <style lang="less" scoped>
+.search-container {
+  .van-search__action {
+    color: #fff;
+  }
+}
 </style>

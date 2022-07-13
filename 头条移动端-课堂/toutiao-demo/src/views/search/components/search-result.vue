@@ -44,7 +44,7 @@ export default {
         // 3.关闭加载
         this.loading = false
         // 4.判断数据有无
-        if (data.data.results.length < 10) {
+        if (data.data.results.length < this.per_page) {
           // 没有=》 finished  =  true
           this.finished = true
         } else {
