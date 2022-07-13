@@ -57,6 +57,10 @@ const routes = [
     path: "/search",
     component: () => import("@/views/search")
   },
+  {
+    path: "/article/:id", // 动态路由 to="/article/id数据"
+    component: () => import("@/views/article")
+  },
 ]
 // 实例化路由对象
 const router = new VueRouter({

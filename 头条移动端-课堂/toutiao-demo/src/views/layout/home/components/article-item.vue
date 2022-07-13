@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 标题 -->
-    <van-cell class="article-item">
+    <van-cell class="article-item" :to="`/article/${articleItem.art_id}`">
       <template #title>
         <h3 class="title van-multi-ellipsis--l2">{{ articleItem.title }}</h3>
       </template>

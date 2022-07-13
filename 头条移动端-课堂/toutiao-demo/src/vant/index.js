@@ -18,12 +18,16 @@ import {
     PullRefresh,
     Popup,
     Icon,
-    Search
+    Search,
+    Loading,
+    Divider
 } from 'vant';
 
 Vue.use(Tabbar);
 Vue.use(Popup);
 Vue.use(Icon);
+Vue.use(Divider);
+Vue.use(Loading);
 Vue.use(Search);
 Vue.use(TabbarItem);
 Vue.use(NavBar);
