@@ -1,6 +1,11 @@
 <template>
   <div class="search-suggestion">
-    <van-cell icon="search" v-for="(item, index) in list" :key="index">
+    <van-cell
+      @click="$emit('search', item)"
+      icon="search"
+      v-for="(item, index) in list"
+      :key="index"
+    >
       <template #title> <span v-html="hightColorText(item)"></span> </template>
     </van-cell>
   </div>
