@@ -2,11 +2,13 @@ import Vue from 'vue';
 import {
     Tabbar, TabbarItem, Form, Field, NavBar, Button, CountDown, Toast,
     Image as VanImage, Grid, GridItem, Cell, Dialog, Search, Tab, Tabs,
-    List, PullRefresh, Popup, Icon,
+    List, PullRefresh, Popup, Icon, Loading, Divider
 } from 'vant';
 
 Vue.use(Tabbar)
     .use(TabbarItem)
+    .use(Loading)
+    .use(Divider)
     .use(PullRefresh)
     .use(Popup)
     .use(Icon)

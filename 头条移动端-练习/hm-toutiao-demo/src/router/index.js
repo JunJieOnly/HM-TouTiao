@@ -58,6 +58,11 @@ const routes = [
       needLogin: true
     }
   },
+  {
+    path: "/article/:id",  // 获取文章需要文章的id，所以使用动态路由
+    component: () => import("@/views/article")
+
+  }
 ]
 // 实例化路由对象
 const router = new VueRouter({
