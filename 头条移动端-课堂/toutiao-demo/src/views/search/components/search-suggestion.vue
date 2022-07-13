@@ -19,6 +19,7 @@ export default {
   data() {
     return {
       list: [],
+      timer: null,
     }
   },
   watch: {
@@ -27,7 +28,14 @@ export default {
       deep: true, // 开启深度监听
       immediate: true, // 立即执行一次
       handler() {
-        this.infoData()
+        // 判断前面的定时器是否开启，如果开启就停止上一次的定时器，重新开启下面的定时器
+        if (this.timer) {
+          clearTimeout(this.timer)
+        }
+        // 防抖： 一段时间内，不管触发多少次，只执行最后一次（本质：定时器）
+        this.timer = setTimeout(() => {
+          this.infoData()
+        }, 200)
       },
     },
   },
@@ -50,6 +58,7 @@ export default {
       }
     },
     hightColorText(text) {
+      // 使用正则表达式，匹配关键字，使关键字变红
       let reg = new RegExp(this.searchText, "gi") // g是全局匹配； i 忽略大小写
       return text.replace(
         reg,
