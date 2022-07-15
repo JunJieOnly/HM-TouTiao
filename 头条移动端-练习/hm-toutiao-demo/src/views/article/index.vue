@@ -11,13 +11,13 @@
 
     <div class="main-wrap">
       <!-- 加载中 -->
-      <div class="loading-wrap">
+      <div class="loading-wrap" v-if="isArticleStatus === 1">
         <van-loading color="#3296fa" vertical>加载中</van-loading>
       </div>
       <!-- /加载中 -->
 
       <!-- 加载完成-文章详情 -->
-      <div class="article-detail">
+      <div class="article-detail" v-if="isArticleStatus === 2">
         <!-- 文章标题 -->
         <h1 class="article-title">{{ articleList.title }}</h1>
         <!-- /文章标题 -->
@@ -29,7 +29,7 @@
             slot="icon"
             round
             fit="cover"
-            src="https://img.yzcdn.cn/vant/cat.jpeg"
+            :src="articleList.aut_photo"
           />
           <div slot="title" class="user-name">{{ articleList.aut_name }}</div>
           <div slot="label" class="publish-date">
@@ -53,7 +53,11 @@
         <!-- /用户信息 -->
 
         <!-- 文章内容 -->
-        <div class="article-content" v-html="articleList.content"></div>
+        <div
+          ref="content"
+          class="article-content markdown-body"
+          v-html="articleList.content"
+        ></div>
         <van-divider>正文结束</van-divider>
         <!-- 底部区域 -->
         <div class="article-bottom">
@@ -70,17 +74,19 @@
       <!-- /加载完成-文章详情 -->
 
       <!-- 加载失败：404 -->
-      <div class="error-wrap">
+      <div class="error-wrap" v-if="isArticleStatus === 4">
         <van-icon name="failure" />
         <p class="text">该资源不存在或已删除！</p>
       </div>
       <!-- /加载失败：404 -->
 
       <!-- 加载失败：其它未知错误（例如网络原因或服务端异常） -->
-      <div class="error-wrap">
+      <div class="error-wrap" v-if="isArticleStatus === 3">
         <van-icon name="failure" />
         <p class="text">内容加载失败！</p>
-        <van-button class="retry-btn">点击重试</van-button>
+        <van-button class="retry-btn" @click="getArticleInfo"
+          >点击重试</van-button
+        >
       </div>
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
@@ -89,26 +95,54 @@
 
 <script>
 import { getArticleInfoApi } from "@/api/Article"
+// 图片预览 -- 函数调用
+import { ImagePreview } from "vant"
 export default {
   name: "ArticleIndex",
   data() {
     return {
       articleList: {},
       article_id: this.$route.params.id,
+      // 文章状态 1=>加载中 2=>文章正文 3=>其他原因加载失败 4=> 网络404
+      isArticleStatus: 1,
     }
   },
   computed: {},
   watch: {},
   created() {
     this.getArticleInfo()
-    console.log(this.$route.params.id)
+    // 文章id
+    // console.log(this.$route.params.id)
   },
   methods: {
     async getArticleInfo() {
+      this.isArticleStatus = 1
       try {
         const { data } = await getArticleInfoApi(this.article_id)
         this.articleList = data.data
+        this.isArticleStatus = 2
+        // 使用图片组件，要在文章渲染出来后使用
+        await this.$nextTick(() => {
+          const nodeImg = this.$refs.content.querySelectorAll("img")
+          // 1.获取内容内所有的图片地址存入一个数组
+          const imgSrc = Array.from(nodeImg).map((item) => item.src)
+          // 2.给所有的图片绑定点击事件
+          nodeImg.forEach((item, index) => {
+            item.onclick = function () {
+              // 使用图片预览方法
+              ImagePreview({
+                images: imgSrc,
+                startPosition: index,
+              })
+            }
+          })
+        })
       } catch (error) {
+        if (error.response.status === 404) {
+          this.isArticleStatus = 4
+        } else {
+          this.isArticleStatus = 3
+        }
         console.log(error)
       }
     },
@@ -117,6 +151,7 @@ export default {
 </script>
 
 <style scoped lang="less">
+@import "@/styles/github-markdown.css";
 .article-container {
   .van-nav-bar {
     background-color: #3296fa;
