@@ -35,20 +35,12 @@
           <div slot="label" class="publish-date">
             {{ articleList.pubdate | relativeTime }}
           </div>
-          <van-button
-            class="follow-btn"
-            type="info"
-            color="#3296fa"
-            round
-            size="small"
-            icon="plus"
-            >关注</van-button
-          >
-          <!-- <van-button
-            class="follow-btn"
-            round
-            size="small"
-          >已关注</van-button> -->
+          <!-- 关注组件 -->
+          <follow-user
+            :is-followed.sync="articleList.is_followed"
+            :user-id="articleList.aut_id"
+          />
+          <!-- /关注组件 -->
         </van-cell>
         <!-- /用户信息 -->
 
@@ -65,8 +57,18 @@
             >写评论</van-button
           >
           <van-icon name="comment-o" info="123" color="#777" />
-          <van-icon color="#777" name="star-o" />
-          <van-icon color="#777" name="good-job-o" />
+          <!-- 收藏 -->
+          <collect-article
+            :is-followed.sync="articleList.is_collected"
+            :user-id="articleList.art_id"
+          />
+          <!-- /收藏 -->
+          <!-- 点赞 -->
+          <zan-article
+            :is-followed.sync="articleList.attitude"
+            :user-id="articleList.art_id"
+          />
+          <!-- /点赞 -->
           <van-icon name="share" color="#777777"></van-icon>
         </div>
         <!-- /底部区域 -->
@@ -95,6 +97,9 @@
 
 <script>
 import { getArticleInfoApi } from "@/api/Article"
+import followUser from "@/components/followed-user"
+import collectArticle from "@/components/collected-article"
+import zanArticle from "@/components/zan-article"
 // 图片预览 -- 函数调用
 import { ImagePreview } from "vant"
 export default {
@@ -107,8 +112,11 @@ export default {
       isArticleStatus: 1,
     }
   },
-  computed: {},
-  watch: {},
+  components: {
+    followUser,
+    collectArticle,
+    zanArticle,
+  },
   created() {
     this.getArticleInfo()
     // 文章id
