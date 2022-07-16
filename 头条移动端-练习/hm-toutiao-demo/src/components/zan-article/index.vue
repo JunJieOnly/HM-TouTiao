@@ -4,14 +4,14 @@
     v-else
     :color="isFollowed === 1 ? '#3296fa' : '#777'"
     :name="isFollowed === 1 ? 'good-job' : 'good-job-o'"
-    @click="collectFn"
+    @click="zanFn"
   />
 </template>
 
 <script>
-import { addCollectArticleApi, delCollectArticleApi } from "@/api/Article"
+import { addZanArticleApi, delZanArticleApi } from "@/api/Article"
 export default {
-  name: "collectArticle",
+  name: "zanArticle",
   props: {
     isFollowed: {
       type: Number,
@@ -28,7 +28,7 @@ export default {
     }
   },
   methods: {
-    async collectFn() {
+    async zanFn() {
       // 首先判断用户是否登录
       // 未登录直接结束
       if (!this.$store.getters.token) return this.$toast.fail("请登录")
@@ -37,10 +37,10 @@ export default {
       try {
         if (this.isFollowed === 1) {
           // 点赞了，点击取消
-          await delCollectArticleApi(this.userId)
+          await delZanArticleApi(this.userId)
         } else {
           // 未点赞，点击点赞
-          await addCollectArticleApi({
+          await addZanArticleApi({
             target: this.userId,
           })
         }

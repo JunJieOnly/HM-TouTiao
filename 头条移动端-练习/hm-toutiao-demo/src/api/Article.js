@@ -25,3 +25,14 @@ export const delCollectArticleApi = (id) => request({
     method: "DELETE",
     url: "/v1_0/article/collections/" + id,
 })
+// 点赞文章
+export const addZanArticleApi = (data) => request({
+    method: "POST",
+    url: "/v1_0/article/likings",
+    data  // target:用户id
+})
+// 取消点赞文章
+export const delZanArticleApi = (id) => request({
+    method: "DELETE",
+    url: "/v1_0/article/likings/" + id,
+})
