@@ -47,3 +47,27 @@ export const getCommentInfoApi = params => request({
     } */
     params
 })
+// 对评论或评论回复点赞
+export const addCommentZanApi = id => request({
+    url: "/v1_0/comment/likings",
+    method: "POST",
+    data: {
+        target: id
+    }
+})
+// 取消对评论或评论回复点赞
+export const delCommentZanApi = id => request({
+    url: "/v1_0/comment/likings/" + id,
+    method: "DELETE",
+})
+// 对文章或者评论进行评论
+export const addCommentInfoApi = data => request({
+    url: "/v1_0/comments",
+    method: "POST",
+    /* data: {
+        target: 评论的目标id（评论文章即为文章id，对评论进行回复则为评论id）
+        content: 评论内容	
+        art_id:	文章id，对评论内容发表回复时，需要传递此参数，表明所属文章id。对文章进行评论，不要传此参数。	
+    } */
+    data
+})

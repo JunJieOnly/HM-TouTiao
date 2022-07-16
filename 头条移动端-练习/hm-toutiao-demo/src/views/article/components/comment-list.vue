@@ -6,18 +6,20 @@
     finished-text="没有更多了"
     @load="onLoad"
   >
-    <van-cell
+    <!-- <van-cell
       v-for="item in list"
       :key="item.com_id"
       :title="item.content"
-    ></van-cell>
+    ></van-cell> -->
+    <comment-item v-for="item in list" :key="item.com_id" :comment="item" />
   </van-list>
 </template>
 <script>
 import { getCommentInfoApi } from "@/api/Article"
+import CommentItem from "./comment-item"
 export default {
   name: "CommentList",
-  components: {},
+  components: { CommentItem },
   props: {
     type: {
       type: String,
@@ -27,10 +29,15 @@ export default {
       type: [String, Number],
       require: true,
     },
+    list: {
+      type: Array,
+      require: true,
+      default: () => [],
+    },
   },
   data() {
     return {
-      list: [], // 评论列表
+      //   list: [], // 评论列表
       loading: false, // 上拉加载更多的 loading
       finished: false, // 是否加载结束
       offset: null, // 评论偏移量
@@ -44,7 +51,6 @@ export default {
   },
   methods: {
     async onLoad() {
-      if (!this.$store.getters.token) return this.$toast.fail("请登录")
       // 1.请求数据
       try {
         const { data } = await getCommentInfoApi({

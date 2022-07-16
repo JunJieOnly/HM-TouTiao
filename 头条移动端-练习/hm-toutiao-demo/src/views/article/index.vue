@@ -54,13 +54,23 @@
         <!------------------------------ 文章评论列表-------------------------------------->
         <comment-list
           :source-id="article_id"
+          :list="commentList"
           @commentTotal="commentTotal = $event"
         />
         <!------------------------------ /文章评论列表 ------------------------------------->
-
+        <!--------------------------------  发布评论 -------------------------------------->
+        <van-popup v-model="isPostShow" position="bottom">
+          <CommentPost :article-id="article_id" @addComment="addComment" />
+        </van-popup>
+        <!-------------------------------- /发布评论 -------------------------------------->
         <!-- 底部区域 -->
         <div class="article-bottom">
-          <van-button class="comment-btn" type="default" round size="small"
+          <van-button
+            class="comment-btn"
+            type="default"
+            round
+            size="small"
+            @click="isPostShow = true"
             >写评论</van-button
           >
           <van-icon name="comment-o" :badge="commentTotal" color="#777" />
@@ -109,6 +119,8 @@ import collectArticle from "@/components/collected-article"
 import zanArticle from "@/components/zan-article"
 // 评论列表组件
 import CommentList from "./components/comment-list"
+// 发表评论组件
+import CommentPost from "./components/comment-post.vue"
 // 图片预览 -- 函数调用
 import { ImagePreview } from "vant"
 export default {
@@ -120,6 +132,8 @@ export default {
       // 文章状态 1=>加载中 2=>文章正文 3=>其他原因加载失败 4=> 网络404
       isArticleStatus: 1,
       commentTotal: "", // 评论总数
+      isPostShow: false, // 发表评论的弹出框的状态
+      commentList: [], // 评论列表
     }
   },
   components: {
@@ -127,6 +141,7 @@ export default {
     collectArticle,
     zanArticle,
     CommentList,
+    CommentPost,
   },
   created() {
     this.getArticleInfo()
@@ -164,6 +179,15 @@ export default {
         }
         console.log(error)
       }
+    },
+    // 处理发布之后的操作
+    addComment(val) {
+      // 关闭弹出层
+      this.isPostShow = false
+      // 视图添加数据
+      this.commentList.unshift(val)
+      // 数量++
+      this.commentTotal++
     },
   },
 }
