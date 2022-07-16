@@ -51,12 +51,19 @@
           v-html="articleList.content"
         ></div>
         <van-divider>正文结束</van-divider>
+        <!------------------------------ 文章评论列表-------------------------------------->
+        <comment-list
+          :source-id="article_id"
+          @commentTotal="commentTotal = $event"
+        />
+        <!------------------------------ /文章评论列表 ------------------------------------->
+
         <!-- 底部区域 -->
         <div class="article-bottom">
           <van-button class="comment-btn" type="default" round size="small"
             >写评论</van-button
           >
-          <van-icon name="comment-o" info="123" color="#777" />
+          <van-icon name="comment-o" :badge="commentTotal" color="#777" />
           <!-- 收藏 -->
           <collect-article
             :is-followed.sync="articleList.is_collected"
@@ -100,6 +107,8 @@ import { getArticleInfoApi } from "@/api/Article"
 import followUser from "@/components/followed-user"
 import collectArticle from "@/components/collected-article"
 import zanArticle from "@/components/zan-article"
+// 评论列表组件
+import CommentList from "./components/comment-list"
 // 图片预览 -- 函数调用
 import { ImagePreview } from "vant"
 export default {
@@ -107,15 +116,17 @@ export default {
   data() {
     return {
       articleList: {},
-      article_id: this.$route.params.id,
+      article_id: this.$route.params.id, // 文章id
       // 文章状态 1=>加载中 2=>文章正文 3=>其他原因加载失败 4=> 网络404
       isArticleStatus: 1,
+      commentTotal: "", // 评论总数
     }
   },
   components: {
     followUser,
     collectArticle,
     zanArticle,
+    CommentList,
   },
   created() {
     this.getArticleInfo()
