@@ -36,3 +36,27 @@ export const delZanAarticleApi = id => request({
     method: "DELETE",
     url: "/v1_0/article/likings/" + id,
 })
+// 获取评论或评论回复
+export const getCommentListApi = params => request({
+    url: "/v1_0/comments",
+    params
+})
+// 对文章点赞
+export const addCommentZanApi = id => request({
+    method: "POST",
+    url: "/v1_0/comment/likings",
+    data: {
+        target: id
+    }
+})
+// 取消对文章点赞
+export const delCommentZanApi = id => request({
+    method: "DELETE",
+    url: "/v1_0/comment/likings/" + id,
+})
+// 发布文章评论 获取 回复评论
+export const addCommentInfoApi = data => request({
+    method: "POST",
+    url: "/v1_0/comments",
+    data
+})

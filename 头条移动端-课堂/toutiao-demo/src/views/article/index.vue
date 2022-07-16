@@ -65,12 +65,32 @@
         ></div>
         <!-- 文章内容 -->
         <van-divider>正文结束</van-divider>
+        <!------------------------------ 文章评论列表-------------------------------------->
+        <comment-list
+          :source-id="articleInfo.art_id"
+          :list="commentList"
+          @replyHandler="replyHandler"
+          @commentTotal="commentTotal = $event"
+        />
+        <!------------------------------ /文章评论列表 ------------------------------------->
+        <!------------------------------ 发布评论-------------------------------------->
+        <van-popup v-model="isPopuoShow" position="bottom">
+          <comment-post
+            :artId="articleInfo.art_id"
+            @postSuccess="postSuccess"
+          />
+        </van-popup>
         <!-- 底部区域 -->
         <div class="article-bottom">
-          <van-button class="comment-btn" type="default" round size="small"
+          <van-button
+            class="comment-btn"
+            type="default"
+            round
+            size="small"
+            @click="isPopuoShow = true"
             >写评论</van-button
           >
-          <van-icon name="comment-o" info="123" color="#777" />
+          <van-icon name="comment-o" :badge="commentTotal" color="#777" />
           <!-- 收藏 -->
           <collectArticle
             v-model="articleInfo.is_collected"
@@ -104,6 +124,15 @@
       </div>
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
+
+    <!-- 评论回复 -->
+    <van-popup style="height: 100vh" position="bottom" v-model="isReplyshow">
+      <commentReply
+        @close="isReplyshow = false"
+        :comment-data="currentComment"
+        v-if="isReplyshow"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -124,17 +153,35 @@ import { ImagePreview } from "vant"
 import userFoolow from "@/components/follow-user"
 import collectArticle from "@/components/collect-article"
 import zanArticle from "@/components/zan-article"
+import commentList from "./components/comment-list.vue"
+import commentPost from "./components/comment-post"
+import commentReply from "./components/comment-Reply.vue"
 export default {
   name: "ArticleIndex",
   components: {
     userFoolow,
     collectArticle,
     zanArticle,
+    commentList,
+    commentPost,
+    commentReply,
   },
   data() {
     return {
       articleInfo: {},
       statusCode: 1, // 状态码： 1=加载中 2=加载成功 3=加载失败 4=网络问题404
+      commentTotal: "", //评论总数
+      aticleId: this.$route.params.id, //当前文章id
+      isPopuoShow: false,
+      commentList: [], // 评论列表
+      isReplyshow: false,
+      currentComment: {}, // 当前评论的数据
+    }
+  },
+  // 爷孙通信
+  provide() {
+    return {
+      aticleId: this.aticleId,
     }
   },
   created() {
@@ -144,7 +191,7 @@ export default {
     async getArticleInfo() {
       this.statusCode = 1 // 给重试按钮使用
       try {
-        const { data } = await getArticleInfoApi(this.$route.params.id)
+        const { data } = await getArticleInfoApi(this.aticleId)
         this.articleInfo = data.data
         // 加载成功
         this.statusCode = 2
@@ -178,6 +225,20 @@ export default {
     /*    upDataFoollow(val) {
       this.articleInfo.is_followed = val
     }, */
+    postSuccess(val) {
+      // 把数据传递过来
+      this.commentList.unshift(val)
+      // 评论总数加1
+      this.commentTotal++
+      //  关闭弹出层
+      this.isPopuoShow = false
+    },
+    replyHandler(val) {
+      // 打开弹出框
+      this.isReplyshow = true
+      this.currentComment = val
+      // console.log(val)
+    },
   },
 }
 </script>
