@@ -30,6 +30,14 @@ export default {
       type: [String, Number],
       require: true,
     },
+    art_id: {
+      type: [String, Number],
+      require: true,
+    },
+    type: {
+      type: String,
+      default: "a",
+    },
   },
   data() {
     return {
@@ -46,7 +54,7 @@ export default {
         const { data } = await addCommentInfoApi({
           target: this.articleId, // 当前文章的Id
           content: this.message, // 输入框的内容
-          art_id: null, // 对该文章评论不用写值
+          art_id: this.type === "a" ? null : this.art_id, // 对该文章评论不用写值
         })
         if (data.message === "OK") {
           // 发布成功

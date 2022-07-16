@@ -11,7 +11,12 @@
       :key="item.com_id"
       :title="item.content"
     ></van-cell> -->
-    <comment-item v-for="item in list" :key="item.com_id" :comment="item" />
+    <comment-item
+      @reply-click="$emit('reply-click', $event)"
+      v-for="item in list"
+      :key="item.com_id"
+      :comment="item"
+    />
   </van-list>
 </template>
 <script>

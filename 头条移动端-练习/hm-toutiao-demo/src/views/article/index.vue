@@ -53,6 +53,7 @@
         <van-divider>正文结束</van-divider>
         <!------------------------------ 文章评论列表-------------------------------------->
         <comment-list
+          @reply-click="onReplyClick"
           :source-id="article_id"
           :list="commentList"
           @commentTotal="commentTotal = $event"
@@ -109,6 +110,15 @@
       </div>
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
+    <!-- 回复评论 -->
+    <van-popup position="bottom" style="height: 100vh" v-model="isReplyShow">
+      <CommentReply
+        v-if="isReplyShow"
+        :comment="currentComment"
+        @close="isReplyShow = false"
+      />
+    </van-popup>
+    <!-- /回复评论 -->
   </div>
 </template>
 
@@ -121,6 +131,8 @@ import zanArticle from "@/components/zan-article"
 import CommentList from "./components/comment-list"
 // 发表评论组件
 import CommentPost from "./components/comment-post.vue"
+// 回复评论组件
+import CommentReply from "./components/comment-reply"
 // 图片预览 -- 函数调用
 import { ImagePreview } from "vant"
 export default {
@@ -134,6 +146,14 @@ export default {
       commentTotal: "", // 评论总数
       isPostShow: false, // 发表评论的弹出框的状态
       commentList: [], // 评论列表
+      isReplyShow: false, // 回复评论的弹出层
+      currentComment: {}, // 接收commentItem传出来当前评论的数据
+    }
+  },
+  // 爷孙通信
+  provide() {
+    return {
+      articleId: this.article_id,
     }
   },
   components: {
@@ -142,6 +162,7 @@ export default {
     zanArticle,
     CommentList,
     CommentPost,
+    CommentReply,
   },
   created() {
     this.getArticleInfo()
@@ -188,6 +209,11 @@ export default {
       this.commentList.unshift(val)
       // 数量++
       this.commentTotal++
+    },
+    // 接收commentItem抛出来的事件
+    onReplyClick(val) {
+      this.isReplyShow = true
+      this.currentComment = val
     },
   },
 }
