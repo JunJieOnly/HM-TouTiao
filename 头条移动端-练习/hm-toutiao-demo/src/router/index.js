@@ -59,6 +59,14 @@ const routes = [
     }
   },
   {
+    path: "/user",
+    component: () => import("@/views/user"),
+    meta: {
+      // 需要登录
+      needLogin: true
+    }
+  },
+  {
     path: "/article/:id",  // 获取文章需要文章的id，所以使用动态路由
     component: () => import("@/views/article")
 
