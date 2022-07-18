@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunktoutiao_demo"]=self["webpackChunktoutiao_demo"]||[]).push([[634],{8634:function(u,t,n){n.r(t),n.d(t,{default:function(){return a}});var e=function(){var u=this,t=u._self._c;return t("div",[u._v("问答页")])},l=[],o={},r=o,i=n(1001),s=(0,i.Z)(r,e,l,!1,null,null,null),a=s.exports}}]);
