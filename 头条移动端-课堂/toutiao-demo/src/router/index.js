@@ -61,6 +61,13 @@ const routes = [
     path: "/article/:id", // 动态路由 to="/article/id数据"
     component: () => import("@/views/article")
   },
+  {
+    path: "/user/edit",
+    component: () => import("@/views/user/edit"),
+    meta: {
+      needLogin: true
+    }
+  },
 ]
 // 实例化路由对象
 const router = new VueRouter({

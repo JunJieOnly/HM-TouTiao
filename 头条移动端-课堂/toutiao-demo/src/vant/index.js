@@ -20,11 +20,15 @@ import {
     Icon,
     Search,
     Loading,
-    Divider
+    Divider,
+    Picker,
+    DatetimePicker
 } from 'vant';
 
 Vue.use(Tabbar);
 Vue.use(Popup);
+Vue.use(Picker);
+Vue.use(DatetimePicker);
 Vue.use(Icon);
 Vue.use(Divider);
 Vue.use(Loading);

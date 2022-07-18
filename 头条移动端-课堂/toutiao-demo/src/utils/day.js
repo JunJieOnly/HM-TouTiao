@@ -8,3 +8,4 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 dayjs.extend(relativeTime)
 // 定义一个全局过滤器
 Vue.filter("relativeTime", val => dayjs().to(dayjs(val)))
+export default dayjs
