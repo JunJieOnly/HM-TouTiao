@@ -9,3 +9,4 @@ dayjs.locale('zh-cn')
 // console.log(dayjs().to(dayjs("2019-03-11 09:00:00")));到 X 的相对时间
 // 设置全局过滤器
 Vue.filter("relativeTime", val => dayjs().to(dayjs(val)))
+export default dayjs

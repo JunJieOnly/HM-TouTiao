@@ -31,6 +31,9 @@ instance.interceptors.response.use(function (response) {
     if (error.response && error.response.status === 401) {
         if (store.getters.token) { // 已登录的情况下
             const { refresh_token } = store.state.user
+            const { token } = store.state.user
+            console.log(refresh_token);
+            console.log(token);
             // 使用刷新token更新token
             try {
                 const { data } = await axios({
@@ -51,7 +54,7 @@ instance.interceptors.response.use(function (response) {
             } catch (error) {
                 // 如果报错，就是刷新token也过期了，让用户重新登录
                 Toast.fail("请重新登录")
-                // router.push("/login")
+                router.push("/login")
             }
         } else {
             // 未登录，让用户登录
